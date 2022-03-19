@@ -1,0 +1,5 @@
+/.idea
+/swagger
+/vendor.protogen
+/config/dev.env
+Dockerfile

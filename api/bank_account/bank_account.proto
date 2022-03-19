@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package bank_account_pb;
+
+option go_package = "/bank_account;bank_account";
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+service BankAccount {
+  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {
+    option (google.api.http) = {
+      post: "/v1/{userID}/accounts/create"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Создать аккаунт"
+      description: "Создает аккаунт для указаного пользователя"
+    };
+  }
+}
+
+message CreateAccountRequest {
+  int64 userID = 1;
+}
+
+message CreateAccountResponse {
+
+}
