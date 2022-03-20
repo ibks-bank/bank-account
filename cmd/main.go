@@ -16,7 +16,7 @@ import (
 	"github.com/ibks-bank/bank-account/internal/app/bank_account"
 	"github.com/ibks-bank/bank-account/internal/pkg/auth"
 	"github.com/ibks-bank/bank-account/internal/pkg/store"
-	gw "github.com/ibks-bank/bank-account/pkg/bank_account"
+	gw "github.com/ibks-bank/bank-account/pkg/bank-account"
 	_ "github.com/lib/pq"
 	"github.com/rakyll/statik/fs"
 	"google.golang.org/grpc"

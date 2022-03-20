@@ -6,7 +6,7 @@ require (
 	github.com/golang/glog v1.0.0
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
-	github.com/ibks-bank/bank-account/pkg/bank_account v0.0.0-00010101000000-000000000000
+	github.com/ibks-bank/bank-account/pkg/bank-account v0.0.0-00010101000000-000000000000
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.4
 	github.com/rakyll/statik v0.1.7
@@ -27,4 +27,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/ibks-bank/bank-account/pkg/bank_account => ./pkg/bank_account
+replace github.com/ibks-bank/bank-account/pkg/bank-account => ./pkg/bank_account
