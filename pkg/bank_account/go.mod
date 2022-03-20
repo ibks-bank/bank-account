@@ -1,4 +1,4 @@
-module github.com/ibks-bank/bank_account/pkg/bank_account
+module github.com/ibks-bank/bank-account/pkg/bank_account
 
 go 1.18
 
