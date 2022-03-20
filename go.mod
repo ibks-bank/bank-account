@@ -7,6 +7,8 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/ibks-bank/bank-account/pkg/bank-account v0.0.0-00010101000000-000000000000
+	github.com/ibks-bank/libs/auth v1.0.1
+	github.com/ibks-bank/libs/cerr v1.0.0
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.4
 	github.com/rakyll/statik v0.1.7
@@ -14,6 +16,7 @@ require (
 )
 
 require (
+	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.9.0 // indirect
 	github.com/kr/text v0.2.0 // indirect

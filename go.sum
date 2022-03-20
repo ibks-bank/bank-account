@@ -13,6 +13,8 @@ github.com/cncf/xds/go v0.0.0-20210922020428-25de7278fc84/go.mod h1:eXthEFrGJvWH
 github.com/cncf/xds/go v0.0.0-20211011173535-cb28da3451f1/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1 h1:CaO/zOnF8VvUfEbhRatPcwKVWamvbYd8tQGRWacE9kU=
+github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1/go.mod h1:+hnT3ywWDTAFrW5aE+u2Sa/wT555ZqwoCS+pk3p6ry4=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
@@ -51,6 +53,14 @@ github.com/grpc-ecosystem/grpc-gateway v1.16.0 h1:gmcG1KaJ57LophUzW0Hy8NmPhnMZb4
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.9.0 h1:SLkFeyLhrg86Ny5Wme4MGGace7EHfgsb07uWX/QUGEQ=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.9.0/go.mod h1:z5aB5opCfWSoAzCrC18hMgjy4oWJ2dPXkn+f3kqTHxI=
+github.com/ibks-bank/libs/auth v0.0.0-20220320135205-6590d9a21188 h1:KG34JYJpKM3JADCQrdkX+IA/954YZ7upBSrfKGSo3hE=
+github.com/ibks-bank/libs/auth v0.0.0-20220320135205-6590d9a21188/go.mod h1:0jX1NdJoXTfSEd4Vi4PD5jZl3wx+4HWgKmHc8+OyQ9s=
+github.com/ibks-bank/libs/auth v1.0.1 h1:7hIwjsn9Edy8ZQvoNe1ZtYgYeqn06vU8oM+sBl+A2vo=
+github.com/ibks-bank/libs/auth v1.0.1/go.mod h1:0jX1NdJoXTfSEd4Vi4PD5jZl3wx+4HWgKmHc8+OyQ9s=
+github.com/ibks-bank/libs/cerr v0.0.0-20220320134530-d51247524d6e h1:1bMQf/Yc9v7uRohIYtCbG4k0I4cpQeySnpJuD47pCgA=
+github.com/ibks-bank/libs/cerr v0.0.0-20220320134530-d51247524d6e/go.mod h1:BMaoS7NtDzshhXVyDqLLJSqt9WCYDgOTN4Fn3OkjfaA=
+github.com/ibks-bank/libs/cerr v1.0.0 h1:N56oWnEkTELxq0Ru9tTOZAv5UTftIxpRSqpZKB3y4ss=
+github.com/ibks-bank/libs/cerr v1.0.0/go.mod h1:BMaoS7NtDzshhXVyDqLLJSqt9WCYDgOTN4Fn3OkjfaA=
 github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
 github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
