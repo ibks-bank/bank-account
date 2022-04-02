@@ -82,6 +82,7 @@ func (st *store) getTransactions(
 			AccountFrom: accountFrom,
 			Amount:      trxM.Amount,
 			Type:        trxM.Type,
+			Time:        trxM.CreatedAt,
 		})
 	}
 
@@ -100,7 +101,7 @@ func (st *store) buildFilter(trxFilter *entities.TransactionFilter) []filter.Fil
 	}
 
 	if !trxFilter.DateTo.IsZero() {
-		filters = append(filters, filter.ByDateTo(trxFilter.DateFrom))
+		filters = append(filters, filter.ByDateTo(trxFilter.DateTo))
 	}
 
 	return filters
@@ -117,9 +118,9 @@ func (st *store) CreateTransaction(ctx context.Context, amount, accountFromID, a
 		return 0, cerr.Wrap(err, "can't get account_to by id")
 	}
 
-	trxType := entities.Payment
+	trxType := entities.Transfer
 	if accountTo.UserID == 0 {
-		trxType = entities.Transfer
+		trxType = entities.Payment
 	}
 
 	trxM := &models.Transaction{

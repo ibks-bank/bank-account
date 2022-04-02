@@ -32,13 +32,17 @@ func validateCreateTransactionRequest(req *bank_account.CreateTransactionRequest
 		return err
 	}
 
-	err = validation.ValidateStruct(&req,
+	err = validation.ValidateStruct(req,
 		validation.Field(&req.AccountID, validation.Required),
 		validation.Field(&req.Payee, validation.Required),
 		validation.Field(&req.Amount, validation.Required),
 	)
 	if err != nil {
 		return err
+	}
+
+	if req.GetAccountID() == req.GetPayee() {
+		return cerr.New("accountID and payee can't be equal")
 	}
 
 	return nil

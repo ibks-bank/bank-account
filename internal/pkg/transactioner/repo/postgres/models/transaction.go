@@ -20,11 +20,12 @@ type Transaction struct {
 }
 
 func (t *Transaction) Insert(ctx context.Context, db *sql.DB) error {
-	err := db.QueryRowContext(
-		ctx,
-		"insert into transactions values ($1, $2, $3, $4, $5, $6, $7) returning \"id\"",
-		t.ID, t.CreatedAt, t.AccountTo, t.AccountToName, t.AccountFrom, t.Amount, t.Type,
-	).Scan(&t.ID)
+	query := `insert 
+			  into transactions("account_to", "account_to_name", "account_from", "amount", "type") 
+			  values ($1, $2, $3, $4, $5) 
+			  returning "id"`
+
+	err := db.QueryRowContext(ctx, query, t.AccountTo, t.AccountToName, t.AccountFrom, t.Amount, t.Type).Scan(&t.ID)
 	if err != nil {
 		return cerr.Wrap(err, "can't exec query")
 	}

@@ -11,7 +11,7 @@ type Filter func(query string, args []interface{}) (string, []interface{})
 func ByDateFrom(date time.Time) Filter {
 	return func(query string, args []interface{}) (string, []interface{}) {
 		args = append(args, date)
-		query = withCondition(query) + fmt.Sprintf(" >= $%d ", len(args))
+		query = withCondition(query) + fmt.Sprintf(" created_at >= $%d ", len(args))
 		return query, args
 	}
 }
@@ -19,7 +19,7 @@ func ByDateFrom(date time.Time) Filter {
 func ByDateTo(date time.Time) Filter {
 	return func(query string, args []interface{}) (string, []interface{}) {
 		args = append(args, date)
-		query = withCondition(query) + fmt.Sprintf(" <= $%d ", len(args))
+		query = withCondition(query) + fmt.Sprintf(" created_at <= $%d ", len(args))
 		return query, args
 	}
 }

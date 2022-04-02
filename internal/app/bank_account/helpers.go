@@ -4,6 +4,7 @@ import (
 	"github.com/ibks-bank/bank-account/internal/pkg/entities"
 	bank_account "github.com/ibks-bank/bank-account/pkg/bank-account"
 	"github.com/ibks-bank/libs/cerr"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func currencyFromProto(cur bank_account.Account_Currency) (entities.Currency, error) {
@@ -29,6 +30,7 @@ func transactionsToProto(trxs []*entities.Transaction) []*bank_account.Transacti
 			AccountTo:   trx.AccountTo.ID,
 			Amount:      trx.Amount,
 			Type:        transactionTypeToProto(trx.Type),
+			Time:        timestamppb.New(trx.Time),
 		})
 	}
 

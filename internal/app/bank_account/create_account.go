@@ -50,7 +50,7 @@ func validateCreateAccountRequest(req *bank_account.CreateAccountRequest) error 
 		return err
 	}
 
-	err = validation.ValidateStruct(&req,
+	err = validation.ValidateStruct(req,
 		validation.Field(&req.UserID, validation.Required),
 		validation.Field(&req.Currency, validation.Required),
 		validation.Field(&req.Name, validation.Required),

@@ -17,6 +17,7 @@ type Transaction struct {
 	AccountFrom *Account
 	Amount      int64
 	Type        TransactionType
+	Time        time.Time
 }
 
 type TransactionType string

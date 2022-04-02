@@ -33,7 +33,7 @@ func validateGetAccountTransactionsRequest(req *bank_account.GetAccountTransacti
 		return err
 	}
 
-	err = validation.ValidateStruct(&req,
+	err = validation.ValidateStruct(req,
 		validation.Field(&req.AccountID, validation.Required),
 	)
 	if err != nil {
@@ -55,7 +55,7 @@ func buildFilter(filterProto *bank_account.GetAccountTransactionsRequest_FilterB
 	}
 
 	if filterProto.GetDateTo() != nil {
-		filter.DateFrom = filterProto.GetDateTo().AsTime()
+		filter.DateTo = filterProto.GetDateTo().AsTime()
 	}
 
 	return filter

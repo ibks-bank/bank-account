@@ -204,11 +204,12 @@ type Transaction struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          int64            `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	AccountFrom int64            `protobuf:"varint,2,opt,name=accountFrom,proto3" json:"accountFrom,omitempty"`
-	AccountTo   int64            `protobuf:"varint,3,opt,name=accountTo,proto3" json:"accountTo,omitempty"`
-	Amount      int64            `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	Type        Transaction_Type `protobuf:"varint,5,opt,name=type,proto3,enum=bank_account_pb.Transaction_Type" json:"type,omitempty"`
+	Id          int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	AccountFrom int64                  `protobuf:"varint,2,opt,name=accountFrom,proto3" json:"accountFrom,omitempty"`
+	AccountTo   int64                  `protobuf:"varint,3,opt,name=accountTo,proto3" json:"accountTo,omitempty"`
+	Amount      int64                  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Type        Transaction_Type       `protobuf:"varint,5,opt,name=type,proto3,enum=bank_account_pb.Transaction_Type" json:"type,omitempty"`
+	Time        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=time,proto3" json:"time,omitempty"`
 }
 
 func (x *Transaction) Reset() {
@@ -276,6 +277,13 @@ func (x *Transaction) GetType() Transaction_Type {
 		return x.Type
 	}
 	return Transaction_TYPE_UNKNOWN
+}
+
+func (x *Transaction) GetTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Time
+	}
+	return nil
 }
 
 type CreateAccountRequest struct {
@@ -690,7 +698,7 @@ var file_api_bank_account_bank_account_proto_rawDesc = []byte{
 	0x12, 0x10, 0x0a, 0x0c, 0x43, 0x55, 0x52, 0x52, 0x45, 0x4e, 0x43, 0x59, 0x5f, 0x52, 0x55, 0x42,
 	0x10, 0x01, 0x12, 0x11, 0x0a, 0x0d, 0x43, 0x55, 0x52, 0x52, 0x45, 0x4e, 0x43, 0x59, 0x5f, 0x45,
 	0x55, 0x52, 0x4f, 0x10, 0x02, 0x12, 0x16, 0x0a, 0x12, 0x43, 0x55, 0x52, 0x52, 0x45, 0x4e, 0x43,
-	0x59, 0x5f, 0x44, 0x4f, 0x4c, 0x4c, 0x41, 0x52, 0x5f, 0x55, 0x53, 0x10, 0x03, 0x22, 0xeb, 0x01,
+	0x59, 0x5f, 0x44, 0x4f, 0x4c, 0x4c, 0x41, 0x52, 0x5f, 0x55, 0x53, 0x10, 0x03, 0x22, 0x9b, 0x02,
 	0x0a, 0x0b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a,
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x20, 0x0a,
 	0x0b, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x46, 0x72, 0x6f, 0x6d, 0x18, 0x02, 0x20, 0x01,
@@ -701,7 +709,10 @@ var file_api_bank_account_bank_account_proto_rawDesc = []byte{
 	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x35, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05, 0x20,
 	0x01, 0x28, 0x0e, 0x32, 0x21, 0x2e, 0x62, 0x61, 0x6e, 0x6b, 0x5f, 0x61, 0x63, 0x63, 0x6f, 0x75,
 	0x6e, 0x74, 0x5f, 0x70, 0x62, 0x2e, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x2e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x3d, 0x0a, 0x04,
+	0x6e, 0x2e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x2e, 0x0a, 0x04,
+	0x74, 0x69, 0x6d, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
+	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x22, 0x3d, 0x0a, 0x04,
 	0x54, 0x79, 0x70, 0x65, 0x12, 0x10, 0x0a, 0x0c, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x55, 0x4e, 0x4b,
 	0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x11, 0x0a, 0x0d, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x54,
 	0x52, 0x41, 0x4e, 0x53, 0x46, 0x45, 0x52, 0x10, 0x01, 0x12, 0x10, 0x0a, 0x0c, 0x54, 0x59, 0x50,
@@ -838,22 +849,23 @@ var file_api_bank_account_bank_account_proto_goTypes = []interface{}{
 var file_api_bank_account_bank_account_proto_depIdxs = []int32{
 	0,  // 0: bank_account_pb.Account.currency:type_name -> bank_account_pb.Account.Currency
 	1,  // 1: bank_account_pb.Transaction.type:type_name -> bank_account_pb.Transaction.Type
-	0,  // 2: bank_account_pb.CreateAccountRequest.currency:type_name -> bank_account_pb.Account.Currency
-	10, // 3: bank_account_pb.GetAccountTransactionsRequest.filterBy:type_name -> bank_account_pb.GetAccountTransactionsRequest.FilterBy
-	3,  // 4: bank_account_pb.GetAccountTransactionsResponse.transactions:type_name -> bank_account_pb.Transaction
-	11, // 5: bank_account_pb.GetAccountTransactionsRequest.FilterBy.dateFrom:type_name -> google.protobuf.Timestamp
-	11, // 6: bank_account_pb.GetAccountTransactionsRequest.FilterBy.dateTo:type_name -> google.protobuf.Timestamp
-	4,  // 7: bank_account_pb.BankAccount.CreateAccount:input_type -> bank_account_pb.CreateAccountRequest
-	6,  // 8: bank_account_pb.BankAccount.Pay:input_type -> bank_account_pb.CreateTransactionRequest
-	8,  // 9: bank_account_pb.BankAccount.GetAccountTransactions:input_type -> bank_account_pb.GetAccountTransactionsRequest
-	5,  // 10: bank_account_pb.BankAccount.CreateAccount:output_type -> bank_account_pb.CreateAccountResponse
-	7,  // 11: bank_account_pb.BankAccount.Pay:output_type -> bank_account_pb.CreateTransactionResponse
-	9,  // 12: bank_account_pb.BankAccount.GetAccountTransactions:output_type -> bank_account_pb.GetAccountTransactionsResponse
-	10, // [10:13] is the sub-list for method output_type
-	7,  // [7:10] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	11, // 2: bank_account_pb.Transaction.time:type_name -> google.protobuf.Timestamp
+	0,  // 3: bank_account_pb.CreateAccountRequest.currency:type_name -> bank_account_pb.Account.Currency
+	10, // 4: bank_account_pb.GetAccountTransactionsRequest.filterBy:type_name -> bank_account_pb.GetAccountTransactionsRequest.FilterBy
+	3,  // 5: bank_account_pb.GetAccountTransactionsResponse.transactions:type_name -> bank_account_pb.Transaction
+	11, // 6: bank_account_pb.GetAccountTransactionsRequest.FilterBy.dateFrom:type_name -> google.protobuf.Timestamp
+	11, // 7: bank_account_pb.GetAccountTransactionsRequest.FilterBy.dateTo:type_name -> google.protobuf.Timestamp
+	4,  // 8: bank_account_pb.BankAccount.CreateAccount:input_type -> bank_account_pb.CreateAccountRequest
+	6,  // 9: bank_account_pb.BankAccount.Pay:input_type -> bank_account_pb.CreateTransactionRequest
+	8,  // 10: bank_account_pb.BankAccount.GetAccountTransactions:input_type -> bank_account_pb.GetAccountTransactionsRequest
+	5,  // 11: bank_account_pb.BankAccount.CreateAccount:output_type -> bank_account_pb.CreateAccountResponse
+	7,  // 12: bank_account_pb.BankAccount.Pay:output_type -> bank_account_pb.CreateTransactionResponse
+	9,  // 13: bank_account_pb.BankAccount.GetAccountTransactions:output_type -> bank_account_pb.GetAccountTransactionsResponse
+	11, // [11:14] is the sub-list for method output_type
+	8,  // [8:11] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_api_bank_account_bank_account_proto_init() }

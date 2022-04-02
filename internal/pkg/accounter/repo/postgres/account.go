@@ -82,7 +82,7 @@ func (st *store) UpdateAccount(ctx context.Context, account *entities.Account) e
 		ID:       account.ID,
 		Currency: account.Currency,
 		Balance:  account.Balance,
-		Limit:    account.Balance,
+		Limit:    account.Limit,
 		UserID:   account.UserID,
 		Name:     account.Name,
 	}).Update(ctx, st.db)

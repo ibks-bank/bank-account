@@ -69,6 +69,7 @@ message Transaction {
   int64 accountTo = 3;
   int64 amount = 4;
   Type type = 5;
+  google.protobuf.Timestamp time = 6;
 }
 
 message CreateAccountRequest {

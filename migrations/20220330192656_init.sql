@@ -7,7 +7,7 @@ create table if not exists accounts
     "id"         bigserial primary key,
     "created_at" timestamp not null check ( "created_at" > '1970-01-01' ) default now(),
     "currency"   currency  not null,
-    "balance"    bigint    not null check ( "balance" != 0 ),
+    "balance"    bigint    not null,
     "limit"      bigint    not null check ( "limit" != 0 ),
     "user_id"    bigint    not null check ( "user_id" != 0 ),
     "name"       text      not null check ( "name" != '' )
@@ -31,4 +31,6 @@ create table if not exists transactions
 -- +goose StatementBegin
 drop table if exists accounts;
 drop table if exists transactions;
+drop type if exists currency;
+drop type if exists transaction_type;
 -- +goose StatementEnd
