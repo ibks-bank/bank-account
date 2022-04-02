@@ -9,6 +9,7 @@ import (
 )
 
 type configuration struct {
+	MaxLimit int64
 	Database *DatabaseConfiguration
 }
 
@@ -43,7 +44,15 @@ func readConfig() *configuration {
 		pgPort = 5432
 	}
 
+	value, ok = os.LookupEnv("ACCOUNT_MAX_LIMIT")
+	maxLimit, err := strconv.ParseInt(value, 10, 64)
+	if !ok || err != nil {
+		log.Println("No max limit passed. Using default 5.000.000,00 limit")
+		maxLimit = 5_000_000_00
+	}
+
 	return &configuration{
+		MaxLimit: maxLimit,
 		Database: &DatabaseConfiguration{
 			Address:  os.Getenv("PG_IP"),
 			Port:     pgPort,

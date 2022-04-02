@@ -14,7 +14,10 @@ import (
 	_ "github.com/ibks-bank/bank-account/cmd/swagger"
 	"github.com/ibks-bank/bank-account/config"
 	"github.com/ibks-bank/bank-account/internal/app/bank_account"
-	"github.com/ibks-bank/bank-account/internal/pkg/store"
+	account_repo "github.com/ibks-bank/bank-account/internal/pkg/accounter/repo/postgres"
+	account_usecase "github.com/ibks-bank/bank-account/internal/pkg/accounter/usecase"
+	transaction_repo "github.com/ibks-bank/bank-account/internal/pkg/transactioner/repo/postgres"
+	transaction_usecase "github.com/ibks-bank/bank-account/internal/pkg/transactioner/usecase"
 	gw "github.com/ibks-bank/bank-account/pkg/bank-account"
 	"github.com/ibks-bank/libs/auth"
 	_ "github.com/lib/pq"
@@ -42,7 +45,11 @@ func main() {
 	if err != nil {
 		log.Fatal("can't open database")
 	}
-	st := store.New(postgres)
+
+	accountRepo := account_repo.NewAccountRepo(postgres)
+	transactionRepo := transaction_repo.NewTransactionRepo(postgres, accountRepo)
+	transactionUC := transaction_usecase.NewTransactionUseCase(transactionRepo)
+	accountUC := account_usecase.NewAccountUseCase(accountRepo, transactionUC)
 
 	lis, err := net.Listen("tcp", ":"+grpcPort)
 	if err != nil {
@@ -50,10 +57,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	gw.RegisterBankAccountServer(
-		s,
-		bank_account.NewServer(st),
-	)
+	gw.RegisterBankAccountServer(s, bank_account.NewServer(accountUC, transactionUC))
 	log.Println("Serving gRPC on 0.0.0.0:" + grpcPort)
 	go func() {
 		log.Fatalln(s.Serve(lis))
