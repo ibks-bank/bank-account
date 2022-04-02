@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -56,8 +57,18 @@ func main() {
 		log.Fatalln("Failed to listen:", err)
 	}
 
-	s := grpc.NewServer()
-	gw.RegisterBankAccountServer(s, bank_account.NewServer(accountUC, transactionUC))
+	s := grpc.NewServer(grpc.UnaryInterceptor(auth.NewAuthorizer(
+		conf.Auth.SigningKey,
+		time.Duration(conf.Auth.TokenTTL)*time.Second,
+	).Interceptor))
+
+	gw.RegisterBankAccountServer(
+		s,
+		bank_account.NewServer(
+			accountUC,
+			transactionUC,
+			conf.MaxLimit,
+		))
 	log.Println("Serving gRPC on 0.0.0.0:" + grpcPort)
 	go func() {
 		log.Fatalln(s.Serve(lis))

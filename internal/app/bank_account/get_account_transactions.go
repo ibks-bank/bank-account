@@ -6,6 +6,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/ibks-bank/bank-account/internal/pkg/entities"
 	bank_account "github.com/ibks-bank/bank-account/pkg/bank-account"
+	"github.com/ibks-bank/libs/auth"
 	"github.com/ibks-bank/libs/cerr"
 	"google.golang.org/grpc/codes"
 )
@@ -14,12 +15,17 @@ func (srv *Server) GetAccountTransactions(ctx context.Context, req *bank_account
 	*bank_account.GetAccountTransactionsResponse,
 	error,
 ) {
-	err := validateGetAccountTransactionsRequest(req)
+	userInfo, err := auth.GetUserInfo(ctx)
+	if err != nil {
+		return nil, cerr.WrapMC(err, "can't get user info from context", codes.Unauthenticated)
+	}
+
+	err = validateGetAccountTransactionsRequest(req)
 	if err != nil {
 		return nil, cerr.WrapMC(err, "validation error", codes.InvalidArgument)
 	}
 
-	transactions, err := srv.trxUseCase.GetTransactionsByAccountID(ctx, req.GetAccountID(), buildFilter(req.GetFilterBy()))
+	transactions, err := srv.trxUseCase.GetTransactionsByAccountID(ctx, userInfo.UserID, buildFilter(req.GetFilterBy()))
 	if err != nil {
 		return nil, cerr.Wrap(err, "can't get transactions by id")
 	}
@@ -29,13 +35,6 @@ func (srv *Server) GetAccountTransactions(ctx context.Context, req *bank_account
 
 func validateGetAccountTransactionsRequest(req *bank_account.GetAccountTransactionsRequest) error {
 	err := validation.Validate(req, validation.NotNil)
-	if err != nil {
-		return err
-	}
-
-	err = validation.ValidateStruct(req,
-		validation.Field(&req.AccountID, validation.Required),
-	)
 	if err != nil {
 		return err
 	}

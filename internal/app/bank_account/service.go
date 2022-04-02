@@ -15,6 +15,15 @@ type Server struct {
 	maxAccountLimit int64
 }
 
-func NewServer(accountUseCase accounter.IUseCase, trxUseCase transactioner.IUseCase) *Server {
-	return &Server{accountUseCase: accountUseCase, trxUseCase: trxUseCase}
+func NewServer(
+	accountUseCase accounter.IUseCase,
+	trxUseCase transactioner.IUseCase,
+	maxAccountLimit int64,
+) *Server {
+
+	return &Server{
+		accountUseCase:  accountUseCase,
+		trxUseCase:      trxUseCase,
+		maxAccountLimit: maxAccountLimit,
+	}
 }

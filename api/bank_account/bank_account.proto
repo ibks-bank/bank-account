@@ -11,7 +11,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 service BankAccount {
   rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {
     option (google.api.http) = {
-      post: "/v1/{userID}/accounts/create"
+      post: "/v1/accounts/create"
       body: "*"
     };
 
@@ -23,7 +23,7 @@ service BankAccount {
 
   rpc Pay (CreateTransactionRequest) returns (CreateTransactionResponse) {
     option (google.api.http) = {
-      post: "/v1/{accountID}/transactions/create"
+      post: "/v1/transactions/create"
       body: "*"
     };
 
@@ -34,7 +34,7 @@ service BankAccount {
   }
 
   rpc GetAccountTransactions (GetAccountTransactionsRequest) returns (GetAccountTransactionsResponse) {
-    option (google.api.http).get = "/v1/{accountID}/transactions";
+    option (google.api.http).get = "/v1/transactions";
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Получить транзакции"
@@ -73,10 +73,9 @@ message Transaction {
 }
 
 message CreateAccountRequest {
-  int64 userID = 1;
-  Account.Currency currency = 2;
-  int64 limit = 3;
-  string name = 4;
+  Account.Currency currency = 1;
+  int64 limit = 2;
+  string name = 3;
 }
 
 message CreateAccountResponse {
@@ -84,9 +83,8 @@ message CreateAccountResponse {
 }
 
 message CreateTransactionRequest {
-  int64 accountID = 1;
-  int64 payee = 2;
-  int64 amount = 3;
+  int64 payee = 1;
+  int64 amount = 2;
 }
 
 message CreateTransactionResponse {
@@ -99,8 +97,7 @@ message GetAccountTransactionsRequest {
     google.protobuf.Timestamp dateTo = 2;
   }
 
-  int64 accountID = 1;
-  FilterBy filterBy = 2;
+  FilterBy filterBy = 1;
 }
 
 message GetAccountTransactionsResponse {

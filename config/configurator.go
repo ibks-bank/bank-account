@@ -10,7 +10,13 @@ import (
 
 type configuration struct {
 	MaxLimit int64
+	Auth     *AuthConfiguration
 	Database *DatabaseConfiguration
+}
+
+type AuthConfiguration struct {
+	SigningKey string
+	TokenTTL   int64
 }
 
 type DatabaseConfiguration struct {
@@ -51,8 +57,19 @@ func readConfig() *configuration {
 		maxLimit = 5_000_000_00
 	}
 
+	value, ok = os.LookupEnv("TOKEN_TTL")
+	tokenTTL, err := strconv.ParseInt(value, 10, 64)
+	if !ok || err != nil {
+		log.Println("No token ttl passed. Using default 86400 ttl")
+		tokenTTL = 86400
+	}
+
 	return &configuration{
 		MaxLimit: maxLimit,
+		Auth: &AuthConfiguration{
+			SigningKey: os.Getenv("SIGNING_KEY"),
+			TokenTTL:   tokenTTL,
+		},
 		Database: &DatabaseConfiguration{
 			Address:  os.Getenv("PG_IP"),
 			Port:     pgPort,

@@ -2,9 +2,12 @@ package bank_account
 
 import (
 	"context"
+	"errors"
 
 	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/ibks-bank/bank-account/internal/pkg/entities"
 	bank_account "github.com/ibks-bank/bank-account/pkg/bank-account"
+	"github.com/ibks-bank/libs/auth"
 	"github.com/ibks-bank/libs/cerr"
 	"google.golang.org/grpc/codes"
 )
@@ -13,13 +16,22 @@ func (srv *Server) Pay(ctx context.Context, req *bank_account.CreateTransactionR
 	*bank_account.CreateTransactionResponse,
 	error,
 ) {
-	err := validateCreateTransactionRequest(req)
+	userInfo, err := auth.GetUserInfo(ctx)
+	if err != nil {
+		return nil, cerr.WrapMC(err, "can't get user info from context", codes.Unauthenticated)
+	}
+
+	err = validateCreateTransactionRequest(req)
 	if err != nil {
 		return nil, cerr.WrapMC(err, "validation error", codes.InvalidArgument)
 	}
 
-	trxID, err := srv.trxUseCase.CreateTransaction(ctx, req.GetAmount(), req.GetAccountID(), req.GetPayee())
+	trxID, err := srv.accountUseCase.TransferMoney(ctx, req.GetAmount(), userInfo.UserID, req.GetPayee())
 	if err != nil {
+		if errors.Is(err, entities.ErrNotEnoughMoney) || errors.Is(err, entities.ErrMoreThanLimit) {
+			return nil, cerr.WrapMC(err, "", codes.InvalidArgument)
+		}
+
 		return nil, cerr.Wrap(err, "can't create transaction")
 	}
 
@@ -33,16 +45,11 @@ func validateCreateTransactionRequest(req *bank_account.CreateTransactionRequest
 	}
 
 	err = validation.ValidateStruct(req,
-		validation.Field(&req.AccountID, validation.Required),
 		validation.Field(&req.Payee, validation.Required),
 		validation.Field(&req.Amount, validation.Required),
 	)
 	if err != nil {
 		return err
-	}
-
-	if req.GetAccountID() == req.GetPayee() {
-		return cerr.New("accountID and payee can't be equal")
 	}
 
 	return nil

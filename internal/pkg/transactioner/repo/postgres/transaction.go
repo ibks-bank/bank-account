@@ -3,9 +3,10 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"github.com/ibks-bank/bank-account/internal/pkg/transactioner/repo/postgres/filter"
+	"errors"
 
 	"github.com/ibks-bank/bank-account/internal/pkg/entities"
+	"github.com/ibks-bank/bank-account/internal/pkg/transactioner/repo/postgres/filter"
 	"github.com/ibks-bank/bank-account/internal/pkg/transactioner/repo/postgres/models"
 	"github.com/ibks-bank/libs/cerr"
 )
@@ -160,6 +161,9 @@ func (st *store) CreateTransaction(ctx context.Context, amount, accountFromID, a
 		return nil
 	})
 	if trxErr != nil {
+		if errors.Is(trxErr, entities.ErrNotEnoughMoney) || errors.Is(trxErr, entities.ErrMoreThanLimit) {
+			return 0, trxErr
+		}
 		return 0, cerr.Wrap(trxErr, "can't perform transaction")
 	}
 
