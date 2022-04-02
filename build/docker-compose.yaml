@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bank_account
+    ports:
+      - '5433:5432'
+    volumes:
+      - ../sql:/docker-entrypoint-initdb.d
+
+  url_shortener:
+    container_name: bank_account
+    image: ujuzy/bank_account
+    environment:
+      # Postgres
+      - PG_IP=postgres
+      - PG_PORT=5432
+      - PG_DATABASE=profile
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
+      - ACCOUNT_MAX_LIMIT=500000000
+    ports:
+      #TCP
+      - '3011:3001'
+      #GRPC
+      - '3022:3002'
+    depends_on:
+      - postgres

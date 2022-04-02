@@ -3,3 +3,4 @@
 /vendor.protogen
 /config/dev.env
 Dockerfile
+app
