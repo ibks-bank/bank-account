@@ -20,6 +20,19 @@ func currencyFromProto(cur bank_account.Account_Currency) (entities.Currency, er
 	}
 }
 
+func currencyToProto(cur entities.Currency) bank_account.Account_Currency {
+	switch cur {
+	case entities.Rub:
+		return bank_account.Account_CURRENCY_RUB
+	case entities.Euro:
+		return bank_account.Account_CURRENCY_EURO
+	case entities.DollarUs:
+		return bank_account.Account_CURRENCY_DOLLAR_US
+	default:
+		return bank_account.Account_CURRENCY_UNKNOWN
+	}
+}
+
 func transactionsToProto(trxs []*entities.Transaction) []*bank_account.Transaction {
 	trxsProto := make([]*bank_account.Transaction, 0, len(trxs))
 
@@ -45,5 +58,23 @@ func transactionTypeToProto(t entities.TransactionType) bank_account.Transaction
 		return bank_account.Transaction_TYPE_PAYMENT
 	default:
 		return bank_account.Transaction_TYPE_UNKNOWN
+	}
+}
+
+func accountsToProto(accounts []*entities.Account) []*bank_account.Account {
+	result := make([]*bank_account.Account, 0, len(accounts))
+	for _, account := range accounts {
+		result = append(result, accountToProto(account))
+	}
+	return result
+}
+
+func accountToProto(account *entities.Account) *bank_account.Account {
+	return &bank_account.Account{
+		Id:       account.ID,
+		Currency: currencyToProto(account.Currency),
+		Limit:    account.Limit,
+		UserID:   account.UserID,
+		Balance:  account.Balance,
 	}
 }

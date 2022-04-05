@@ -6,6 +6,7 @@ option go_package = "/bank_account;bank_account";
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 service BankAccount {
@@ -20,6 +21,24 @@ service BankAccount {
       description: "Создает аккаунт для указаного пользователя"
     };
   }
+
+  rpc GetAccount(GetAccountRequest) returns (Account) {
+    option (google.api.http).get = "/v1/accounts/{accountID}";
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получить счет"
+      description: "Получить счет"
+    };
+  }
+
+  rpc GetAccounts(google.protobuf.Empty) returns(GetAccountsResponse)  {
+    option (google.api.http).get = "/v1/accounts";
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получить счета"
+      description: "Получить все счета клиента"
+    };
+  };
 
   rpc Pay (CreateTransactionRequest) returns (CreateTransactionResponse) {
     option (google.api.http) = {
@@ -55,6 +74,7 @@ message Account {
   Currency currency = 2;
   int64 limit = 3;
   int64 userID = 4;
+  int64 balance = 5;
 }
 
 message Transaction {
@@ -102,4 +122,12 @@ message GetAccountTransactionsRequest {
 
 message GetAccountTransactionsResponse {
   repeated Transaction transactions = 1;
+}
+
+message GetAccountsResponse {
+  repeated Account accounts = 1;
+}
+
+message GetAccountRequest {
+  int64 accountID = 1;
 }
