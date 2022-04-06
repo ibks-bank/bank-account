@@ -26,7 +26,21 @@ func (srv *Server) Pay(ctx context.Context, req *bank_account.CreateTransactionR
 		return nil, cerr.WrapMC(err, "validation error", codes.InvalidArgument)
 	}
 
-	trxID, err := srv.accountUseCase.TransferMoney(ctx, req.GetAmount(), userInfo.UserID, req.GetPayee())
+	accountFrom, err := srv.accountUseCase.GetAccountByID(ctx, req.GetAccountID())
+	if err != nil {
+		return nil, cerr.Wrap(err, "can't get account from by id")
+	}
+
+	if userInfo.UserID != accountFrom.UserID {
+		return nil, cerr.NewC("user ids are not equal", codes.Unauthenticated)
+	}
+
+	accountTo, err := srv.accountUseCase.GetAccountByID(ctx, req.GetPayee())
+	if err != nil {
+		return nil, cerr.Wrap(err, "can't get account from by id")
+	}
+
+	trxID, err := srv.accountUseCase.TransferMoney(ctx, req.GetAmount(), accountFrom, accountTo)
 	if err != nil {
 		if errors.Is(err, entities.ErrNotEnoughMoney) || errors.Is(err, entities.ErrMoreThanLimit) {
 			return nil, cerr.WrapMC(err, "", codes.InvalidArgument)

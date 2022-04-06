@@ -24,6 +24,6 @@ func (trx *trxUseCase) GetTransactionsByAccountID(
 	return trx.repo.GetTransactionsByAccountID(ctx, accountID, filter)
 }
 
-func (trx *trxUseCase) CreateTransaction(ctx context.Context, amount, accountFrom, accountTo int64) (int64, error) {
+func (trx *trxUseCase) CreateTransaction(ctx context.Context, amount int64, accountFrom, accountTo *entities.Account) (int64, error) {
 	return trx.repo.CreateTransaction(ctx, amount, accountFrom, accountTo)
 }

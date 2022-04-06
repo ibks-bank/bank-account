@@ -108,17 +108,7 @@ func (st *store) buildFilter(trxFilter *entities.TransactionFilter) []filter.Fil
 	return filters
 }
 
-func (st *store) CreateTransaction(ctx context.Context, amount, accountFromID, accountToID int64) (int64, error) {
-	accountFrom, err := st.accountRepo.GetAccountByID(ctx, accountFromID)
-	if err != nil {
-		return 0, cerr.Wrap(err, "can't get account_from by id")
-	}
-
-	accountTo, err := st.accountRepo.GetAccountByID(ctx, accountToID)
-	if err != nil {
-		return 0, cerr.Wrap(err, "can't get account_to by id")
-	}
-
+func (st *store) CreateTransaction(ctx context.Context, amount int64, accountFrom, accountTo *entities.Account) (int64, error) {
 	trxType := entities.Transfer
 	if accountTo.UserID == 0 {
 		trxType = entities.Payment
@@ -138,7 +128,7 @@ func (st *store) CreateTransaction(ctx context.Context, amount, accountFromID, a
 			return entities.ErrNotEnoughMoney
 		}
 
-		err = st.accountRepo.UpdateAccount(ctx, accountFrom)
+		err := st.accountRepo.UpdateAccount(ctx, accountFrom)
 		if err != nil {
 			return cerr.Wrap(err, "can't update account_from balance")
 		}

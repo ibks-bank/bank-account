@@ -11,7 +11,7 @@ generate:
 
 .PHONY: migrate-up
 migrate-up:
-	(cd migrations; goose postgres "host=localhost port=5433 user=postgres password=postgres database=account sslmode=disable timezone=UTC" up)
+	(cd migrations; goose postgres "host=localhost port=5433 user=postgres password=postgres database=bank_account sslmode=disable timezone=UTC" up)
 
 .PHONY: migrate-down
 migrate-down:

@@ -30,7 +30,7 @@ func (a *account) GetAccountsByUserID(ctx context.Context, userID int64) ([]*ent
 	return a.accountRepo.GetAccountsByUserID(ctx, userID)
 }
 
-func (a *account) TransferMoney(ctx context.Context, amount, accountFrom, accountTo int64) (int64, error) {
+func (a *account) TransferMoney(ctx context.Context, amount int64, accountFrom, accountTo *entities.Account) (int64, error) {
 	return a.trxUseCase.CreateTransaction(ctx, amount, accountFrom, accountTo)
 }
 

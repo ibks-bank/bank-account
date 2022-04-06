@@ -11,5 +11,5 @@ type IRepo interface {
 		[]*entities.Transaction, error,
 	)
 
-	CreateTransaction(ctx context.Context, amount, accountFromID, accountToID int64) (int64, error)
+	CreateTransaction(ctx context.Context, amount int64, accountFrom, accountTo *entities.Account) (int64, error)
 }

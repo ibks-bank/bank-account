@@ -103,8 +103,9 @@ message CreateAccountResponse {
 }
 
 message CreateTransactionRequest {
-  int64 payee = 1;
-  int64 amount = 2;
+  int64 accountID = 1;
+  int64 payee = 2;
+  int64 amount = 3;
 }
 
 message CreateTransactionResponse {
