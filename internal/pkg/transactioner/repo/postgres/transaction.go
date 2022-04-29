@@ -123,23 +123,39 @@ func (st *store) CreateTransaction(ctx context.Context, amount int64, accountFro
 	}
 
 	trxErr := st.WithTransaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
-		accountFrom.Balance -= amount
-		if accountFrom.Balance < 0 {
+		if accountFrom.Balance-amount < 0 {
+			err := st.logTrxError(ctx, trxM, entities.ErrNotEnoughMoney.Error())
+			if err != nil {
+				return cerr.Wrap(err, "can't log transaction")
+			}
 			return entities.ErrNotEnoughMoney
 		}
+		accountFrom.Balance -= amount
 
-		err := st.accountRepo.UpdateAccount(ctx, accountFrom)
+		err := st.accountRepo.UpdateAccountTrx(ctx, tx, accountFrom)
 		if err != nil {
+			err = st.logTrxError(ctx, trxM, err.Error())
+			if err != nil {
+				return cerr.Wrap(err, "can't log transaction")
+			}
 			return cerr.Wrap(err, "can't update account_from balance")
 		}
 
-		accountTo.Balance += amount
-		if accountTo.Balance > accountTo.Limit {
+		if accountTo.Balance+amount > accountTo.Limit {
+			err = st.logTrxError(ctx, trxM, entities.ErrMoreThanLimit.Error())
+			if err != nil {
+				return cerr.Wrap(err, "can't log transaction")
+			}
 			return entities.ErrMoreThanLimit
 		}
+		accountTo.Balance += amount
 
-		err = st.accountRepo.UpdateAccount(ctx, accountTo)
+		err = st.accountRepo.UpdateAccountTrx(ctx, tx, accountTo)
 		if err != nil {
+			err = st.logTrxError(ctx, trxM, err.Error())
+			if err != nil {
+				return cerr.Wrap(err, "can't log transaction")
+			}
 			return cerr.Wrap(err, "can't update account_to balance")
 		}
 
@@ -158,4 +174,9 @@ func (st *store) CreateTransaction(ctx context.Context, amount int64, accountFro
 	}
 
 	return trxM.ID, nil
+}
+
+func (st *store) logTrxError(ctx context.Context, trx *models.Transaction, err string) error {
+	trx.Error = sql.NullString{String: err, Valid: true}
+	return trx.Insert(ctx, st.db)
 }

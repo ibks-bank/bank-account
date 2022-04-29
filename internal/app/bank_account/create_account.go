@@ -63,5 +63,9 @@ func validateCreateAccountRequest(req *bank_account.CreateAccountRequest) error 
 		return err
 	}
 
+	if req.GetLimit() < 0 {
+		return cerr.New("wrong limit")
+	}
+
 	return nil
 }

@@ -60,6 +60,23 @@ service BankAccount {
       description: "Получить все транзакции указанного банковского счета"
     };
   }
+
+  rpc FillBalance (FillBalanceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/accounts/{accountID}/fill-balance"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Пополнить баланс"
+      description: "Пополнить баланс"
+    };
+  }
+}
+
+message FillBalanceRequest {
+  int64 accountID = 1;
+  int64 amount = 2;
 }
 
 message Account {

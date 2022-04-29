@@ -6,7 +6,6 @@ import (
 	"github.com/ibks-bank/bank-account/internal/pkg/accounter"
 	"github.com/ibks-bank/bank-account/internal/pkg/entities"
 	"github.com/ibks-bank/bank-account/internal/pkg/transactioner"
-	"github.com/ibks-bank/libs/cerr"
 )
 
 type account struct {
@@ -34,22 +33,14 @@ func (a *account) TransferMoney(ctx context.Context, amount int64, accountFrom, 
 	return a.trxUseCase.CreateTransaction(ctx, amount, accountFrom, accountTo)
 }
 
-func (a *account) UpdateAccountBalance(ctx context.Context, accID, balance int64) error {
-	acc, err := a.GetAccountByID(ctx, accID)
-	if err != nil {
-		return cerr.Wrap(err, "can't get account by id")
-	}
-	acc.Balance = balance
+func (a *account) UpdateAccountBalance(ctx context.Context, acc *entities.Account, newBalance int64) error {
+	acc.Balance = newBalance
 
 	return a.accountRepo.UpdateAccount(ctx, acc)
 }
 
-func (a *account) UpdateAccountLimit(ctx context.Context, accID, limit int64) error {
-	acc, err := a.GetAccountByID(ctx, accID)
-	if err != nil {
-		return cerr.Wrap(err, "can't get account by id")
-	}
-	acc.Limit = limit
+func (a *account) UpdateAccountLimit(ctx context.Context, acc *entities.Account, newLimit int64) error {
+	acc.Limit = newLimit
 
 	return a.accountRepo.UpdateAccount(ctx, acc)
 }

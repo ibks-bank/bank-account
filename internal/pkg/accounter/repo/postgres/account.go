@@ -2,8 +2,9 @@ package postgres
 
 import (
 	"context"
-
+	"database/sql"
 	"github.com/ibks-bank/bank-account/internal/pkg/accounter/repo/postgres/models"
+	db "github.com/ibks-bank/bank-account/internal/pkg/db_helper"
 	"github.com/ibks-bank/bank-account/internal/pkg/entities"
 	"github.com/ibks-bank/libs/cerr"
 )
@@ -78,6 +79,14 @@ func (st *store) GetAccountsByUserID(ctx context.Context, userID int64) ([]*enti
 }
 
 func (st *store) UpdateAccount(ctx context.Context, account *entities.Account) error {
+	return updateAccount(ctx, st.db, account)
+}
+
+func (st *store) UpdateAccountTrx(ctx context.Context, trx *sql.Tx, account *entities.Account) error {
+	return updateAccount(ctx, trx, account)
+}
+
+func updateAccount(ctx context.Context, exec db.IDatabase, account *entities.Account) error {
 	return (&models.Account{
 		ID:       account.ID,
 		Currency: account.Currency,
@@ -85,5 +94,5 @@ func (st *store) UpdateAccount(ctx context.Context, account *entities.Account) e
 		Limit:    account.Limit,
 		UserID:   account.UserID,
 		Name:     account.Name,
-	}).Update(ctx, st.db)
+	}).Update(ctx, exec)
 }

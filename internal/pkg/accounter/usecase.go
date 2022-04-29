@@ -11,6 +11,6 @@ type IUseCase interface {
 	GetAccountByID(ctx context.Context, id int64) (*entities.Account, error)
 	GetAccountsByUserID(ctx context.Context, userID int64) ([]*entities.Account, error)
 	TransferMoney(ctx context.Context, amount int64, accountFrom, accountTo *entities.Account) (int64, error)
-	UpdateAccountBalance(ctx context.Context, accID, balance int64) error
-	UpdateAccountLimit(ctx context.Context, accID, limit int64) error
+	UpdateAccountBalance(ctx context.Context, acc *entities.Account, newBalance int64) error
+	UpdateAccountLimit(ctx context.Context, acc *entities.Account, newLimit int64) error
 }

@@ -2,7 +2,7 @@ package models
 
 import (
 	"context"
-	"database/sql"
+	"github.com/ibks-bank/bank-account/internal/pkg/db_helper"
 	"time"
 
 	"github.com/ibks-bank/bank-account/internal/pkg/entities"
@@ -19,7 +19,7 @@ type Account struct {
 	Name      string
 }
 
-func (a *Account) Insert(ctx context.Context, db *sql.DB) error {
+func (a *Account) Insert(ctx context.Context, db db.IDatabase) error {
 	query := `insert 
 			  into accounts("currency", "balance", "limit", "user_id", "name") 
 			  values ($1, $2, $3, $4, $5) 
@@ -33,7 +33,7 @@ func (a *Account) Insert(ctx context.Context, db *sql.DB) error {
 	return nil
 }
 
-func (a *Account) Select(ctx context.Context, db *sql.DB) error {
+func (a *Account) Select(ctx context.Context, db db.IDatabase) error {
 	err := db.QueryRowContext(
 		ctx,
 		"select * from accounts where \"id\" = $1",
@@ -46,7 +46,7 @@ func (a *Account) Select(ctx context.Context, db *sql.DB) error {
 	return nil
 }
 
-func (a *Account) Update(ctx context.Context, db *sql.DB) error {
+func (a *Account) Update(ctx context.Context, db db.IDatabase) error {
 	_, err := db.ExecContext(
 		ctx,
 		"update accounts set \"balance\" = $1, \"limit\" = $2, \"name\" = $3 where \"id\" = $4",

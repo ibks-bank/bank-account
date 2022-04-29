@@ -66,5 +66,9 @@ func validateCreateTransactionRequest(req *bank_account.CreateTransactionRequest
 		return err
 	}
 
+	if req.GetAmount() <= 0 {
+		return cerr.New("wrong amount")
+	}
+
 	return nil
 }
