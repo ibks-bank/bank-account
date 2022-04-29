@@ -1,12 +1,29 @@
 package bank_account
 
-type storeInterface interface {
-}
+import (
+	"github.com/ibks-bank/bank-account/internal/pkg/accounter"
+	"github.com/ibks-bank/bank-account/internal/pkg/transactioner"
+	bank_account "github.com/ibks-bank/bank-account/pkg/bank-account"
+)
 
 type Server struct {
-	store storeInterface
+	bank_account.UnimplementedBankAccountServer
+
+	accountUseCase accounter.IUseCase
+	trxUseCase     transactioner.IUseCase
+
+	maxAccountLimit int64
 }
 
-func NewServer(store storeInterface) *Server {
-	return &Server{store: store}
+func NewServer(
+	accountUseCase accounter.IUseCase,
+	trxUseCase transactioner.IUseCase,
+	maxAccountLimit int64,
+) *Server {
+
+	return &Server{
+		accountUseCase:  accountUseCase,
+		trxUseCase:      trxUseCase,
+		maxAccountLimit: maxAccountLimit,
+	}
 }

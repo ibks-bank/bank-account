@@ -5,12 +5,14 @@ package bank_account_pb;
 option go_package = "/bank_account;bank_account";
 
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 service BankAccount {
   rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {
     option (google.api.http) = {
-      post: "/v1/{userID}/accounts/create"
+      post: "/v1/accounts/create"
       body: "*"
     };
 
@@ -19,12 +21,131 @@ service BankAccount {
       description: "Создает аккаунт для указаного пользователя"
     };
   }
+
+  rpc GetAccount(GetAccountRequest) returns (Account) {
+    option (google.api.http).get = "/v1/accounts/{accountID}";
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получить счет"
+      description: "Получить счет"
+    };
+  }
+
+  rpc GetAccounts(google.protobuf.Empty) returns(GetAccountsResponse)  {
+    option (google.api.http).get = "/v1/accounts";
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получить счета"
+      description: "Получить все счета клиента"
+    };
+  };
+
+  rpc Pay (CreateTransactionRequest) returns (CreateTransactionResponse) {
+    option (google.api.http) = {
+      post: "/v1/transactions/create"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Создать транзакцию"
+      description: "Создать транзакцию"
+    };
+  }
+
+  rpc GetAccountTransactions (GetAccountTransactionsRequest) returns (GetAccountTransactionsResponse) {
+    option (google.api.http).get = "/v1/transactions";
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получить транзакции"
+      description: "Получить все транзакции указанного банковского счета"
+    };
+  }
+
+  rpc FillBalance (FillBalanceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/accounts/{accountID}/fill-balance"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Пополнить баланс"
+      description: "Пополнить баланс"
+    };
+  }
+}
+
+message FillBalanceRequest {
+  int64 accountID = 1;
+  int64 amount = 2;
+}
+
+message Account {
+  enum Currency {
+    CURRENCY_UNKNOWN = 0;
+    CURRENCY_RUB = 1;
+    CURRENCY_EURO = 2;
+    CURRENCY_DOLLAR_US = 3;
+  }
+
+  int64 id = 1;
+  Currency currency = 2;
+  int64 limit = 3;
+  int64 userID = 4;
+  int64 balance = 5;
+}
+
+message Transaction {
+  enum Type {
+    TYPE_UNKNOWN = 0;
+    TYPE_TRANSFER = 1;
+    TYPE_PAYMENT = 2;
+  }
+
+  int64 id = 1;
+  int64 accountFrom = 2;
+  int64 accountTo = 3;
+  int64 amount = 4;
+  Type type = 5;
+  google.protobuf.Timestamp time = 6;
 }
 
 message CreateAccountRequest {
-  int64 userID = 1;
+  Account.Currency currency = 1;
+  int64 limit = 2;
+  string name = 3;
 }
 
 message CreateAccountResponse {
+  int64 accountID = 1;
+}
 
+message CreateTransactionRequest {
+  int64 accountID = 1;
+  int64 payee = 2;
+  int64 amount = 3;
+}
+
+message CreateTransactionResponse {
+  int64 transactionID = 1;
+}
+
+message GetAccountTransactionsRequest {
+  message FilterBy {
+    google.protobuf.Timestamp dateFrom = 1;
+    google.protobuf.Timestamp dateTo = 2;
+  }
+
+  FilterBy filterBy = 1;
+}
+
+message GetAccountTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
+
+message GetAccountsResponse {
+  repeated Account accounts = 1;
+}
+
+message GetAccountRequest {
+  int64 accountID = 1;
 }
