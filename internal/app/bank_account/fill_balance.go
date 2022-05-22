@@ -31,7 +31,12 @@ func (srv *Server) FillBalance(ctx context.Context, req *bank_account.FillBalanc
 		return nil, cerr.NewC("account doesn't belong to this user", codes.Unauthenticated)
 	}
 
-	err = srv.accountUseCase.UpdateAccountBalance(ctx, acc, acc.Balance+req.GetAmount())
+	newBalance := acc.Balance + req.GetAmount()
+	if acc.Limit < newBalance {
+		return nil, cerr.NewC("exceeds account limit", codes.InvalidArgument)
+	}
+
+	err = srv.accountUseCase.UpdateAccountBalance(ctx, acc, newBalance)
 	if err != nil {
 		return nil, cerr.Wrap(err, "can't update account balance")
 	}

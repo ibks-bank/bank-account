@@ -44,6 +44,7 @@ func transactionsToProto(trxs []*entities.Transaction) []*bank_account.Transacti
 			Amount:      trx.Amount,
 			Type:        transactionTypeToProto(trx.Type),
 			Time:        timestamppb.New(trx.Time),
+			Error:       trx.Error,
 		})
 	}
 

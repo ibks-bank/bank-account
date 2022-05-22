@@ -40,6 +40,14 @@ func (srv *Server) Pay(ctx context.Context, req *bank_account.CreateTransactionR
 		return nil, cerr.Wrap(err, "can't get account from by id")
 	}
 
+	if accountFrom.ID == accountTo.ID {
+		return nil, cerr.NewC("can't transfer money to same account", codes.InvalidArgument)
+	}
+
+	if accountFrom.Currency != accountTo.Currency {
+		return nil, cerr.NewC("can't transfer money to account with different currency", codes.InvalidArgument)
+	}
+
 	trxID, err := srv.accountUseCase.TransferMoney(ctx, req.GetAmount(), accountFrom, accountTo)
 	if err != nil {
 		if errors.Is(err, entities.ErrNotEnoughMoney) || errors.Is(err, entities.ErrMoreThanLimit) {

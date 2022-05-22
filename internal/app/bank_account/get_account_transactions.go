@@ -25,7 +25,16 @@ func (srv *Server) GetAccountTransactions(ctx context.Context, req *bank_account
 		return nil, cerr.WrapMC(err, "validation error", codes.InvalidArgument)
 	}
 
-	transactions, err := srv.trxUseCase.GetTransactionsByAccountID(ctx, userInfo.UserID, buildFilter(req.GetFilterBy()))
+	acc, err := srv.accountUseCase.GetAccountByID(ctx, req.GetAccountID())
+	if err != nil {
+		return nil, cerr.Wrap(err, "can't get account from by id")
+	}
+
+	if userInfo.UserID != acc.UserID {
+		return nil, cerr.NewC("user ids are not equal", codes.Unauthenticated)
+	}
+
+	transactions, err := srv.trxUseCase.GetTransactionsByAccountID(ctx, acc.ID, buildFilter(req.GetFilterBy()))
 	if err != nil {
 		return nil, cerr.Wrap(err, "can't get transactions by id")
 	}
@@ -35,6 +44,13 @@ func (srv *Server) GetAccountTransactions(ctx context.Context, req *bank_account
 
 func validateGetAccountTransactionsRequest(req *bank_account.GetAccountTransactionsRequest) error {
 	err := validation.Validate(req, validation.NotNil)
+	if err != nil {
+		return err
+	}
+
+	err = validation.ValidateStruct(req,
+		validation.Field(&req.AccountID, validation.Required),
+	)
 	if err != nil {
 		return err
 	}

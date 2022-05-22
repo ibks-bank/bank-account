@@ -53,7 +53,7 @@ service BankAccount {
   }
 
   rpc GetAccountTransactions (GetAccountTransactionsRequest) returns (GetAccountTransactionsResponse) {
-    option (google.api.http).get = "/v1/transactions";
+    option (google.api.http).get = "/v1/{accountID}/transactions";
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Получить транзакции"
@@ -107,6 +107,7 @@ message Transaction {
   int64 amount = 4;
   Type type = 5;
   google.protobuf.Timestamp time = 6;
+  string error = 7;
 }
 
 message CreateAccountRequest {
@@ -136,6 +137,7 @@ message GetAccountTransactionsRequest {
   }
 
   FilterBy filterBy = 1;
+  int64 accountID = 2;
 }
 
 message GetAccountTransactionsResponse {

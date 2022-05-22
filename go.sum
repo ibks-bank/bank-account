@@ -58,8 +58,8 @@ github.com/grpc-ecosystem/grpc-gateway v1.16.0 h1:gmcG1KaJ57LophUzW0Hy8NmPhnMZb4
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.9.0 h1:SLkFeyLhrg86Ny5Wme4MGGace7EHfgsb07uWX/QUGEQ=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.9.0/go.mod h1:z5aB5opCfWSoAzCrC18hMgjy4oWJ2dPXkn+f3kqTHxI=
-github.com/ibks-bank/libs/auth v1.0.2 h1:emMWCTerenn+rWzx8N1eY1Yk3vAQoY7WXFrWGn5OCIg=
-github.com/ibks-bank/libs/auth v1.0.2/go.mod h1:0jX1NdJoXTfSEd4Vi4PD5jZl3wx+4HWgKmHc8+OyQ9s=
+github.com/ibks-bank/libs/auth v1.0.3 h1:+lM8bJZiry1T/y1vkykNuud4VvsIkN2VL4sKA+wCNfg=
+github.com/ibks-bank/libs/auth v1.0.3/go.mod h1:0jX1NdJoXTfSEd4Vi4PD5jZl3wx+4HWgKmHc8+OyQ9s=
 github.com/ibks-bank/libs/cerr v1.0.0 h1:N56oWnEkTELxq0Ru9tTOZAv5UTftIxpRSqpZKB3y4ss=
 github.com/ibks-bank/libs/cerr v1.0.0/go.mod h1:BMaoS7NtDzshhXVyDqLLJSqt9WCYDgOTN4Fn3OkjfaA=
 github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=

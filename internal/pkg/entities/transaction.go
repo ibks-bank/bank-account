@@ -18,6 +18,7 @@ type Transaction struct {
 	Amount      int64
 	Type        TransactionType
 	Time        time.Time
+	Error       string
 }
 
 type TransactionType string

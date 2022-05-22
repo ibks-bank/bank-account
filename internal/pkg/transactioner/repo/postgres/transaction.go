@@ -52,6 +52,7 @@ func (st *store) getTransactions(
 			&trx.AccountFrom,
 			&trx.Amount,
 			&trx.Type,
+			&trx.Error,
 		)
 		if err != nil {
 			return nil, cerr.Wrap(err, "can't scan row")
@@ -84,6 +85,7 @@ func (st *store) getTransactions(
 			Amount:      trxM.Amount,
 			Type:        trxM.Type,
 			Time:        trxM.CreatedAt,
+			Error:       trxM.Error.String,
 		})
 	}
 
